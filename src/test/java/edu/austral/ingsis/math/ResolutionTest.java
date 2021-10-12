@@ -2,6 +2,9 @@ package edu.austral.ingsis.math;
 
 import org.junit.Test;
 
+import java.io.IOException;
+import java.util.List;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -13,7 +16,8 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction1() {
-        final Double result = 7d;
+        Function function = new Expression(new Variable(1d), List.of(Operand.ADD), new Variable(6d));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(7d));
     }
@@ -23,7 +27,9 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction2() {
-        final Double result = 6d;
+
+        Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable(2d));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(6d));
     }
@@ -33,7 +39,8 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction3() {
-        final Double result = 13.5;
+        Function function = new Expression(new Expression(new Variable(9d), List.of(Operand.DIVIDE), new Variable(2d)), List.of(Operand.MULTIPLY), new Variable(3d));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(13.5d));
     }
@@ -43,7 +50,9 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction4() {
-        final Double result = 20.25;
+
+        Function function = new Expression(new Expression(new Variable(27d), List.of(Operand.DIVIDE), new Variable(6d)), List.of(Operand.POWER), new Variable(2d));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(20.25d));
     }
@@ -53,7 +62,8 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction5() {
-        final Double result = 6d;
+        Function function = new Expression(new Variable(36d), List.of(Operand.POWER), new Expression(new Variable(1d), List.of(Operand.DIVIDE), new Variable(2d)));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(6d));
     }
@@ -63,7 +73,15 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction6() {
-        final Double result = 136d;
+
+        Function function = null;
+        try {
+            function = new Variable("a", 136d, Operand.ABSOLUTE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert function != null;
+        final Double result = function.solve();
 
         assertThat(result, equalTo(136d));
     }
@@ -73,7 +91,14 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction7() {
-        final Double result = 136d;
+        Function function = null;
+        try {
+            function = new Variable("a", -136d, Operand.ABSOLUTE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assert function != null;
+        final Double result = function.solve();
 
         assertThat(result, equalTo(136d));
     }
@@ -83,7 +108,8 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction8() {
-        final Double result = 0d;
+        Function function = new Expression(new Expression(new Variable(5d), List.of(Operand.SUBTRACT), new Variable(5d)), List.of(Operand.MULTIPLY), new Variable(8d));
+        final Double result = function.solve();
 
         assertThat(result, equalTo(0d));
     }
