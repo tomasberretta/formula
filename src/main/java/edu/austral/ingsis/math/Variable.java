@@ -74,16 +74,7 @@ public class Variable implements Function {
 
     @Override
     public String print() {
-        if(operand != null && operand == Operand.ABSOLUTE){
-            if(name != null) return "|" + name + "|";
-            return "|"+ value.intValue()+ "|";
-        }else if(operand != null && operand == Operand.SQUAREROOT){
-            if(name != null) return "sqrt(" + name + ")";
-            return "sqrt("+ value.intValue()+ ")";
-        }else {
-            if(name != null) return name;
-            return ""+ value.intValue();
-        }
+        return print("");
     }
 
     @Override

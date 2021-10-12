@@ -21,7 +21,6 @@ public class ListVariablesTest {
         Function function = new Expression(new Variable(1d), List.of(Operand.ADD), new Variable(6d));
         final List<String> result = function.getVariables();
 
-
         assertThat(result, empty());
     }
 
@@ -32,7 +31,6 @@ public class ListVariablesTest {
     public void shouldListVariablesFunction2() {
         Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable("div", 4d));
         final List<String> result = function.getVariables();
-
 
         assertThat(result, containsInAnyOrder("div"));
     }

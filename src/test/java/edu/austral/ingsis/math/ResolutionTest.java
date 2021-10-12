@@ -27,7 +27,6 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction2() {
-
         Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable(2d));
         final Double result = function.solve();
 
@@ -50,7 +49,6 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction4() {
-
         Function function = new Expression(new Expression(new Variable(27d), List.of(Operand.DIVIDE), new Variable(6d)), List.of(Operand.POWER), new Variable(2d));
         final Double result = function.solve();
 
@@ -73,7 +71,6 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction6() {
-
         Function function = null;
         try {
             function = new Variable("a", 136d, Operand.ABSOLUTE);

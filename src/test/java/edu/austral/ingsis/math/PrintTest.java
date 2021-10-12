@@ -17,7 +17,6 @@ public class PrintTest {
     public void shouldPrintFunction1() {
         final String expected = "1 + 6";
         Function function = new Expression(new Variable(1d), List.of(Operand.ADD), new Variable(6d));
-
         final String result = function.print();
 
         assertThat(result, equalTo(expected));
@@ -31,7 +30,6 @@ public class PrintTest {
         final String expected = "12 / 2";
         Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable(2d));
         final String result = function.print();
-
 
         assertThat(result, equalTo(expected));
     }
