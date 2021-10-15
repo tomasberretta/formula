@@ -16,8 +16,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction1() {
-        Function function = new Expression(new Variable(1d), List.of(Operand.ADD), new Variable(6d));
-        final Double result = function.solve();
+        Function function = new Expression(new Constant(1d), Operand.ADD, new Constant(6d));
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(7d));
     }
@@ -27,8 +29,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction2() {
-        Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable(2d));
-        final Double result = function.solve();
+        Function function = new Expression(new Constant(12d), Operand.DIVIDE, new Constant(2d));
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(6d));
     }
@@ -38,8 +42,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction3() {
-        Function function = new Expression(new Expression(new Variable(9d), List.of(Operand.DIVIDE), new Variable(2d)), List.of(Operand.MULTIPLY), new Variable(3d));
-        final Double result = function.solve();
+        Function function = new Expression(new Expression(new Constant(9d), Operand.DIVIDE, new Constant(2d)), Operand.MULTIPLY, new Constant(3d));
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(13.5d));
     }
@@ -49,9 +55,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction4() {
-        Function function = new Expression(new Expression(new Variable(27d), List.of(Operand.DIVIDE), new Variable(6d)), List.of(Operand.POWER), new Variable(2d));
-        final Double result = function.solve();
-
+        Function function = new Expression(new Expression(new Constant(27d), Operand.DIVIDE, new Constant(6d)), Operand.POWER, new Constant(2d));
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
         assertThat(result, equalTo(20.25d));
     }
 
@@ -60,8 +67,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction5() {
-        Function function = new Expression(new Variable(36d), List.of(Operand.POWER), new Expression(new Variable(1d), List.of(Operand.DIVIDE), new Variable(2d)));
-        final Double result = function.solve();
+        Function function = new Expression(new Constant(36d), Operand.POWER, new Expression(new Constant(1d), Operand.DIVIDE, new Constant(2d)));
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(6d));
     }
@@ -71,14 +80,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction6() {
-        Function function = null;
-        try {
-            function = new Variable("a", 136d, Operand.ABSOLUTE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert function != null;
-        final Double result = function.solve();
+        Function function = new Constant( 136d, Operand.ABSOLUTE);
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(136d));
     }
@@ -88,14 +93,10 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction7() {
-        Function function = null;
-        try {
-            function = new Variable("a", -136d, Operand.ABSOLUTE);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert function != null;
-        final Double result = function.solve();
+        Function function = new Constant( -136d, Operand.ABSOLUTE);
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
 
         assertThat(result, equalTo(136d));
     }
@@ -105,9 +106,11 @@ public class ResolutionTest {
      */
     @Test
     public void shouldResolveSimpleFunction8() {
-        Function function = new Expression(new Expression(new Variable(5d), List.of(Operand.SUBTRACT), new Variable(5d)), List.of(Operand.MULTIPLY), new Variable(8d));
-        final Double result = function.solve();
+        Function function = new Expression(new Expression(new Constant(5d), Operand.SUBTRACT, new Constant(5d)), Operand.MULTIPLY, new Constant(8d));
 
+        SolverFunctionVisitor solver = new SolverFunctionVisitor();
+        function.acceptVisitor(solver);
+        final Double result = solver.getResult();
         assertThat(result, equalTo(0d));
     }
 }

@@ -1,12 +1,8 @@
 package edu.austral.ingsis.math;
 
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -18,8 +14,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction1() {
-        Function function = new Expression(new Variable(1d), List.of(Operand.ADD), new Variable(6d));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Constant(1d), Operand.ADD, new Constant(6d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, empty());
     }
@@ -29,8 +27,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction2() {
-        Function function = new Expression(new Variable(12d), List.of(Operand.DIVIDE), new Variable("div", 4d));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Constant(12d), Operand.DIVIDE, new Variable("div", 4d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("div"));
     }
@@ -40,8 +40,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction3() {
-        Function function = new Expression(new Expression(new Variable(9d), List.of(Operand.DIVIDE), new Variable("x", 3d)), List.of(Operand.MULTIPLY), new Variable("y", 4d));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Expression(new Constant(9d), Operand.DIVIDE, new Variable("x", 3d)), Operand.MULTIPLY, new Variable("y", 4d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("x", "y"));
     }
@@ -51,8 +53,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction4() {
-        Function function = new Expression(new Expression(new Variable(27d), List.of(Operand.DIVIDE), new Variable("a", 9d)), List.of(Operand.POWER), new Variable("b", 3d));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Expression(new Constant(27d), Operand.DIVIDE, new Variable("a", 9d)), Operand.POWER, new Variable("b", 3d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("a", "b"));
     }
@@ -62,8 +66,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction5() {
-        Function function = new Expression(new Variable("z", 36d), List.of(Operand.POWER),new Expression(new Variable(1d), List.of(Operand.DIVIDE), new Variable( 2d)));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Variable("z", 36d), Operand.POWER,new Expression(new Constant(1d), Operand.DIVIDE, new Constant( 2d)));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("z"));
     }
@@ -73,14 +79,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction6() {
-        Function function = null;
-        try {
-            function = new Expression(new Variable("value", 8d, Operand.ABSOLUTE), List.of(Operand.SUBTRACT), new Variable(8d));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert function != null;
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Variable("value", 8d, Operand.ABSOLUTE), Operand.SUBTRACT, new Constant(8d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("value"));
     }
@@ -90,14 +92,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction7() {
-        Function function = null;
-        try {
-            function = new Expression(new Variable("value", 8d, Operand.ABSOLUTE), List.of(Operand.SUBTRACT), new Variable(8d));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        assert function != null;
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Variable("value", 8d, Operand.ABSOLUTE), Operand.SUBTRACT, new Constant(8d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("value"));
     }
@@ -107,8 +105,10 @@ public class ListVariablesTest {
      */
     @Test
     public void shouldListVariablesFunction8() {
-        Function function = new Expression(new Expression(new Variable(5d), List.of(Operand.SUBTRACT), new Variable("i", 2d)), List.of(Operand.MULTIPLY), new Variable(8d));
-        final List<String> result = function.getVariables();
+        Function function = new Expression(new Expression(new Constant(5d), Operand.SUBTRACT, new Variable("i", 2d)), Operand.MULTIPLY, new Constant(8d));
+        GetVariablesFunctionVisitor solver = new GetVariablesFunctionVisitor();
+        function.acceptVisitor(solver);
+        final List<String> result = solver.getResult();
 
         assertThat(result, containsInAnyOrder("i"));
     }

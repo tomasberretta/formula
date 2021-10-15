@@ -1,16 +1,15 @@
 package edu.austral.ingsis.math;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.text.DecimalFormat;
 
 public class Variable implements Function {
     String name;
     Double value;
     Operand operand;
 
-    public Variable(String name, Double value, Operand operand) throws IOException {
-        if(operand != Operand.SQUAREROOT && operand != Operand.ABSOLUTE) throw new IOException("Invalid operand for variable");
+    public Variable(String name, Double value, Operand operand) {
+        if(operand != Operand.SQUAREROOT && operand != Operand.ABSOLUTE && operand != null) throw new RuntimeException("Invalid operand for variable");
         this.name = name;
         this.value = value;
         this.operand = operand;
@@ -21,54 +20,27 @@ public class Variable implements Function {
         this.value = value;
     }
 
-    public Variable(String name, Operand operand) throws IOException {
-        if(operand != Operand.SQUAREROOT && operand != Operand.ABSOLUTE) throw new IOException("Invalid operand for variable");
+    public Variable(String name, Operand operand) {
+        if(operand != Operand.SQUAREROOT && operand != Operand.ABSOLUTE && operand != null) throw new RuntimeException("Invalid operand for variable");
         this.name = name;
         this.operand = operand;
     }
 
-    public Variable(Double value, Operand operand) throws IOException {
-        if(operand != Operand.SQUAREROOT && operand != Operand.ABSOLUTE) throw new IOException("Invalid operand for variable");
-        this.value = value;
-        this.operand = operand;
-    }
-
-    public Variable(Double value) {
-        this.value = value;
-    }
-
-    @Override
-    public Double solve() {
-        if (operand == null) return value;
-        switch (operand){
-            case SQUAREROOT: return Math.sqrt(value);
-            case ABSOLUTE: return Math.abs(value);
-        }
-        return value;
-    }
-
-    @Override
-    public List<String> getVariables(List<String> variables) {
-        if(name != null) variables.add(name);
-        return variables;
-    }
-
-    @Override
-    public List<String> getVariables() {
-        return getVariables(new ArrayList<>());
+    public Variable(String name) {
+        this.name = name;
     }
 
     @Override
     public String print(String prev) {
         if(operand != null && operand == Operand.ABSOLUTE){
-            if(name != null) return "|"+ prev + name + "|";
-            return "|"+ prev + value.intValue()+ "|";
+            if(value == null) return "|"+ prev + name + "|";
+            return "|"+ prev + new DecimalFormat("#.##").format(value)+ "|";
         }else if(operand != null && operand == Operand.SQUAREROOT){
-            if(name != null) return "sqrt("+ prev + name + ")";
-            return "sqrt("+ prev + value.intValue()+ ")";
+            if(value == null) return "sqrt("+ prev + name + ")";
+            return "sqrt("+ prev + new DecimalFormat("#.##").format(value) + ")";
         }else {
-            if(name != null) return prev + name;
-            return prev + value.intValue();
+            if(value == null) return prev + name;
+            return prev + new DecimalFormat("#.##").format(value);
         }
     }
 
@@ -77,8 +49,30 @@ public class Variable implements Function {
         return print("");
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public Double getValue() {
+        return value;
+    }
+
+    public Operand getOperand() {
+        return operand;
+    }
+
     @Override
     public boolean isComposite() {
         return false;
+    }
+
+    @Override
+    public boolean isConstant() {
+        return false;
+    }
+
+    @Override
+    public void acceptVisitor(FunctionVisitor functionVisitor) {
+        functionVisitor.visitVariable(this);
     }
 }
